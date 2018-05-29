@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
@@ -25,7 +26,7 @@ func main() {
 		configFile  string
 		topic       string
 		message     string
-		token       string
+		tokensJson  string
 		proxy       string
 		title       string
 	)
@@ -45,8 +46,8 @@ func main() {
 	flag.StringVar(&opts.Core.Address, "address", "", "address to bind")
 	flag.StringVar(&opts.Core.Port, "p", "", "port number for gorush")
 	flag.StringVar(&opts.Core.Port, "port", "", "port number for gorush")
-	flag.StringVar(&token, "t", "", "token string")
-	flag.StringVar(&token, "token", "", "token string")
+	flag.StringVar(&tokensJson, "t", "", "tokens string")
+	flag.StringVar(&tokensJson, "tokens", "", "tokens string")
 	flag.StringVar(&opts.Stat.Engine, "e", "", "store engine")
 	flag.StringVar(&opts.Stat.Engine, "engine", "", "store engine")
 	flag.StringVar(&opts.Stat.Redis.Addr, "redis-addr", "", "redis addr")
@@ -146,8 +147,8 @@ func main() {
 		}
 
 		// send message to single device
-		if token != "" {
-			req.Tokens = []string{token}
+		if tokensJson != "" {
+			json.Unmarshal([]byte(tokensJson), &req.Tokens)
 		}
 
 		// send topic message
@@ -184,8 +185,8 @@ func main() {
 		}
 
 		// send message to single device
-		if token != "" {
-			req.Tokens = []string{token}
+		if tokensJson != "" {
+			json.Unmarshal([]byte(tokensJson), &req.Tokens)
 		}
 
 		// send topic message
@@ -274,7 +275,7 @@ Server Options:
     -p, --port <port>                Use port for clients (default: 8088)
     -c, --config <file>              Configuration file path
     -m, --message <message>          Notification message
-    -t, --token <token>              Notification token
+    -t, --tokens <tokens>            Notification tokens
     -e, --engine <engine>            Storage engine (memory, redis ...)
     --title <title>                  Notification title
     --proxy <proxy>                  Proxy URL (only for GCM)
