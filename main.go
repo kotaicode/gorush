@@ -143,6 +143,7 @@ func main() {
 			Platform: gorush.PlatFormAndroid,
 			Message:  message,
 			Title:    title,
+			Sound:    "default",
 		}
 
 		// send message to single device
